@@ -5,14 +5,14 @@ import '../custom_text/text_widget.dart';
 class ItemContainer extends StatelessWidget {
   const ItemContainer({
     super.key,
-    this.Image,
+    this.image,
     this.name,
     this.details,
     this.dailyprice,
     this.price,
     this.availableSize,
   });
-  final String? Image;
+  final String? image;
   final String? name;
   final String? details;
   final double? dailyprice;
@@ -38,15 +38,27 @@ class ItemContainer extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 120,
+            height: 140,
             width: MediaQuery.sizeOf(context).width,
-            decoration: BoxDecoration(
+            child: ClipRRect(
               borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
                 topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
               ),
-              image: DecorationImage(image: NetworkImage("$Image")),
-              color: Colors.red,
+              child: FadeInImage(
+                placeholder: NetworkImage(
+                  "https://i.pinimg.com/originals/8a/c1/29/8ac12962c05648c55ca85771f4a69b2d.gif",
+                ),
+                fit: BoxFit.fill,
+                height: 160,
+                width: 160,
+                image: NetworkImage("${image}"),
+                imageErrorBuilder: (context, i, j) {
+                  return Image.network(
+                    "https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design.jpg",
+                  );
+                },
+              ),
             ),
           ),
           Padding(
@@ -55,7 +67,7 @@ class ItemContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  txt: name ?? "",
+                  txt: name ?? "Not Found",
                   fontWeight: FontWeight.bold,
                   fntsize: 20,
                   maxline: 2,
@@ -69,14 +81,14 @@ class ItemContainer extends StatelessWidget {
                   children: [
                     CustomTextWidget(txt: "Daily price: "),
                     CustomTextWidget(
-                      txt: "${dailyprice ?? ""}",
+                      txt: "${dailyprice ?? ""} \$",
                       textDecoration: TextDecoration.lineThrough,
                       textOverflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
                 CustomTextWidget(
-                  txt: "Price: ${price ?? ""}",
+                  txt: "Price: ${price ?? ""} \$",
                   textOverflow: TextOverflow.ellipsis,
                 ),
                 Divider(color: Colors.black),
@@ -93,7 +105,10 @@ class ItemContainer extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: Center(
-                    child: CustomTextWidget(txt: "${availableSize ?? ""}"),
+                    child: CustomTextWidget(
+                      txt: "${availableSize ?? ""}",
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
